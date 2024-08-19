@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+@font-face {
+  font-family: 'Source Code Pro';
+  src: url('/fonts/SourceCodePro-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('/fonts/SourceSans3-VariableFont_wght.ttf') format('truetype');
+  font-style: normal;
+}
+
+@layer utilities {
+  body{
+    @apply bg-secondary font-SourceSans text-secondaryText
+  }
+  .swiper-button-prev::after, .swiper-button-next::after{
+    @apply !text-white !text-sm !font-bold
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
