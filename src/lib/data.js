@@ -4,7 +4,7 @@ import moment from "moment"
 
 export const fetchComingSoon = async () => {
     try {
-        const res = await fetch('http://localhost:3001/api/coming-soon',{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/coming-soon`,{
             method: 'GET',
         })
         const data = await res.json()
