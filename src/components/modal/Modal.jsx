@@ -4,7 +4,7 @@ const Modal = ({children,isOpen,toggleModal,className}) => {
   return (
         <div
             className="fixed inset-0 flex items-center justify-center 
-            bg-black bg-opacity-20 md:p-0 p-8"
+            bg-black bg-opacity-20 md:p-0 p-8 z-[999]"
             onClick={toggleModal}
             >
             <div

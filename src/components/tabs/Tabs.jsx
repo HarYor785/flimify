@@ -40,7 +40,7 @@ const Tabs = ({tabs, defaultTab, type}) => {
         {/* TAB CONTENTS */}
         <div className='w-full flex flex-col gap-8 py-4 transition-all duration-300 
         ease-in-out animate-fade-in'>
-            {tabs.find(item=>item.title === tab).content}
+            {tabs.find(item=>item.title === tab)?.content}
             {
                 type === 'movie' && 
                 <Button title={'View all'} className={'px-12 mx-auto'} onClick={handleNavigate}/>

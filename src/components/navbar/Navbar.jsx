@@ -16,6 +16,7 @@ import { TbLogout } from "react-icons/tb";
 import { CiSquareQuestion } from "react-icons/ci";
 import {toast} from 'react-toastify'
 import { handleRemoveUser } from '@/states/userSlice';
+import Request from '../request/Request';
 
 
 const NavLink = ({href, title, icon: Icon, left, right, onClick}) =>{
@@ -33,7 +34,7 @@ const NavLink = ({href, title, icon: Icon, left, right, onClick}) =>{
   )
 }
 
-const SubNavbar = ({openSubNav, setOpenSubNav, dispatch}) => {
+const SubNavbar = ({openSubNav, setOpenSubNav, handleOpenRequest, dispatch}) => {
 
   return(
     <div onClick={()=>setOpenSubNav(false)} 
@@ -45,9 +46,9 @@ const SubNavbar = ({openSubNav, setOpenSubNav, dispatch}) => {
       className="flex flex-col items-start gap-3 bg-primary rounded-md mt-12 
         shadow-md p-4 transition-all duration-300 ease-in-out animate-zoom-in">
           <NavLink href="/profile" title="Profile" icon={RiAccountPinBoxLine} left={true}/>
-          <NavLink href="/favourite" title="Favourite" icon={GoBookmark} left={true}/>
-          <NavLink href="/request" title="Request" icon={CiSquareQuestion} left={true}/>
-          <NavLink href="/category/bollywood" title="Settings" icon={IoSettingsOutline } left={true}/>
+          <NavLink href="/watchlist" title="Watchlist" icon={GoBookmark} left={true}/>
+          <NavLink href="#" title="Request" icon={CiSquareQuestion} left={true} onClick={handleOpenRequest}/>
+          {/* <NavLink href="/category/bollywood" title="Settings" icon={IoSettingsOutline } left={true}/> */}
           <NavLink href="/#" title="Logout" icon={TbLogout} left={true}
           onClick={()=>dispatch(handleRemoveUser)}/>
         </div>
@@ -57,6 +58,7 @@ const SubNavbar = ({openSubNav, setOpenSubNav, dispatch}) => {
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
+  const [openRequest, setOpenRequest] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)
   const [isMobileSearch, setIsMobileSearch] = useState(false)
   const [openSubNav, setOpenSubNav] = useState(false)
@@ -96,6 +98,11 @@ const Navbar = () => {
       handleSearch();
     }
   };
+
+  const handleOpenRequest = () =>{
+    setOpenSubNav(false)
+    setOpenRequest(true)
+  }
 
   return (
     <>
@@ -139,23 +146,23 @@ const Navbar = () => {
                 </li>
                 <li className="relative group">
                   <NavLink href="#" title="Movies" icon={IoMdArrowDropdown} right={true}/>
-                  <div className="absolute hidden top-5 left-0 p-3 bg-primary rounded-md 
-                  shadow-md group-hover:flex flex-col items-start gap-2 transition-all 
+                  <div className="absolute hidden top-5 left-0 p-3 px-4 bg-primary rounded-md 
+                  shadow-md group-hover:flex flex-col items-start gap-3 transition-all 
                   duration-300 ease-in-out animate-fade-in">
-                    <NavLink href="/category/african" title="African"/>
-                    <NavLink href="/category/animations" title="Animations"/>
-                    <NavLink href="/category/bollywood" title="Bollywood"/>
-                    <NavLink href="/category/internations" title="International"/>
+                    <NavLink href="/african" title="African"/>
+                    <NavLink href="/animations" title="Animations"/>
+                    <NavLink href="/bollywood" title="Bollywood"/>
+                    <NavLink href="/international" title="International"/>
                   </div>
                 </li>
                 <li>
-                  <NavLink href="/category/tv-series" title="Tv-Series"/>
+                  <NavLink href="/tv-series" title="Tv-Series"/>
                 </li>
                 <li>
-                  <NavLink href="/category/k-drama" title="K-Drama"/>
+                  <NavLink href="/k-drama" title="K-Drama"/>
                 </li>
                 <li>
-                  <NavLink href="/category/community" title="Community"/>
+                  <NavLink href="/community" title="Community"/>
                 </li>
               </ul>
             </div>
@@ -172,11 +179,12 @@ const Navbar = () => {
               />
               {
                 user?.token ? (
-                  <Button title={'Login'} className={`md:block hidden`}/>
-                ) : (
                   <Button title={isMobileSearch ? '' : (user?.userName || 'Ayo')}
                   icon={isMobileSearch ? FaRegUser : null}
                   onClick={()=>setOpenSubNav(!openSubNav)}/>
+                ) : (
+                  <Button title={'Login'} onClick={()=>push('/login')}
+                  className={`md:block hidden`}/>
                 )
               }
 
@@ -192,6 +200,7 @@ const Navbar = () => {
       {/* SUB NAVBAR */}
       <SubNavbar openSubNav={openSubNav} 
       setOpenSubNav={setOpenSubNav}
+      handleOpenRequest={handleOpenRequest}
       dispatch={dispatch}/>
 
       {/* MOBILE SEARCH */}
@@ -213,6 +222,11 @@ const Navbar = () => {
             />
           </div>
         </div>
+      }
+
+      {
+        openRequest && <Request isOpen={openRequest} 
+        setOpenRequest={setOpenRequest}/>
       }
     </>
   )

@@ -4,7 +4,7 @@ import Footer from '../footer/Footer'
 import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-const Container = ({children}) => {
+const Container = ({children, className}) => {
   return (
     <div className='w-full relative flex flex-col overflow-hidden'>
         <ToastContainer 
@@ -20,7 +20,7 @@ const Container = ({children}) => {
             theme="light"
         />
         <Navbar/>
-        <div className='w-full mt-16 md:container mx-auto md:px-20 px-4 mb-7'>
+        <div className={`w-full mt-16 md:container mx-auto md:px-20 px-4 mb-7 min-h-screen ${className}`}>
             {children}
         </div>
         <Footer/>

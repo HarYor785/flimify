@@ -10,15 +10,17 @@ const Select = React.forwardRef(({label,className,children,placeHolder,
                     {label}
                 </label>
             }
-            <select className="select w-full py-0 px-5 h-[45px] rounded-lg 
+            <select className={`select w-full py-0 px-5 h-[45px] rounded-lg 
             transition-all duration-300 ease-in-out focus-within:border-2 
             focus-within:border-main text-secondaryText text-sm 
-            outline-none border-2 border-primary cursor-pointer"
+            outline-none border-2 border-primary cursor-pointer ${className}`}
             {...props} ref={ref}
             >
-                <option disabled selected className="text-primaryText">
-                    {placeHolder}
-                </option>
+                {placeHolder &&
+                    <option disabled selected className="text-primaryText">
+                        {placeHolder}
+                    </option>
+                }
                 {children}
             </select>
             {errors && <span className="text-xs text-red-600">

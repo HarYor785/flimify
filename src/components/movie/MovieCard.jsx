@@ -23,7 +23,7 @@ const MovieCard = ({data}) => {
                     <MdOutlineBookmarkBorder size={18}/>
                 </button>
                 {/* PLAY BUTTON */}
-                <Link href={'/'}
+                <Link href={`/movie/${data?.slug}`}
                 className='relative md:w-14 w-10 md:h-14 h-10 bg-white flex items-center justify-center 
                 rounded-full before:absolute before:top-[-0.5rem] before:left-[-0.5rem] before:content-[""] 
                 before:md:w-[4.5rem] before:md:h-[4.5rem] before:bg-white before:bg-opacity-30 
@@ -35,7 +35,7 @@ const MovieCard = ({data}) => {
             </div>
         </div>
         <div className='w-full flex flex-col items-start gap-0'>
-            <Link href={'/'} className='md:text-lg text-sm text-secondaryText transition-all 
+            <Link href={`/movie/${data?.slug}`} className='md:text-lg text-sm text-secondaryText transition-all 
             duration-300 ease-linear hover:text-main w-full overflow-hidden 
             whitespace-nowrap text-ellipsis font-SourceCodePro'>
                 {data.title}

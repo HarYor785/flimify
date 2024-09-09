@@ -3,11 +3,11 @@ import React from 'react'
 const Input = React.forwardRef(({label,type,placeHolder,className,
     children,labelStyle,icon: Icon, iconClass, iconOnclick, ...props}, ref) => {
   return (
-    <div className='w-full flex flex-col items-start gap-2'>
+    <div className='w-full flex flex-col items-start gap-1'>
         {
             label && 
             <label htmlFor={label ?? placeHolder}
-            className={`text-sm text-primaryText ${labelStyle}`}>
+            className={`md:text-sm text-xs text-primaryText ${labelStyle}`}>
                 {label}
             </label>
         }
@@ -20,7 +20,7 @@ const Input = React.forwardRef(({label,type,placeHolder,className,
             placeholder={placeHolder}
             {...props}
             />
-            {Icon && <Icon className={`text-secondaryText ${iconClass}`} 
+            {Icon && <Icon className={`text-secondaryText cursor-pointer ${iconClass}`} 
             onClick={iconOnclick}/>}
         </div>
         {children}

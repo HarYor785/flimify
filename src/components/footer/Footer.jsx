@@ -37,6 +37,10 @@ const Footer = () => {
           transition-all duration-300 ease-in-out hover:text-main uppercase'>
             Advertise
           </Link>
+          <Link href={'/contact'} className='text-[11px] text-primaryText 
+          transition-all duration-300 ease-in-out hover:text-main uppercase'>
+            Contact Us
+          </Link>
           <Link href={'/dmca'} className='text-[11px] text-primaryText 
           transition-all duration-300 ease-in-out hover:text-main uppercase'>
             DMCA

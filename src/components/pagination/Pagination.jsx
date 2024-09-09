@@ -7,14 +7,14 @@ const Pagination = ({ data, setData, itemsPerPage }) => {
     const totalPages = Math.ceil(data?.length / itemsPerPage);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
 
   // Update the displayed items when currentPage or data changes
-  useEffect(() => {
-    const currentItems = data?.slice(startIndex, endIndex);
-    setData(currentItems);
-    // Dependencies to prevent infinite loop
-  }, [itemsPerPage,currentPage]);
+    useEffect(() => {
+        const currentItems = data?.length > 0 ? data?.slice(startIndex, endIndex) : []
+        setData(currentItems);
+        // Dependencies to prevent infinite loop
+    }, [itemsPerPage, currentPage]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -96,13 +96,13 @@ const Pagination = ({ data, setData, itemsPerPage }) => {
             ))}
 
             <li>
-            <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="py-2 text-base text-primaryText ml-2"
-            >
-                {'>'}
-            </button>
+                <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="py-2 text-base text-primaryText ml-2"
+                >
+                    {'>'}
+                </button>
             </li>
         </ul>
 
