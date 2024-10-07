@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageBg from '../pageBg/PageBg'
 import Image from 'next/image'
 import { MdOutlineBookmarkBorder } from 'react-icons/md'
@@ -8,8 +8,10 @@ import ShareButton from '../ui/ShareButton'
 import DownloadBtn from '../ui/DownloadBtn'
 import { MdOutlineStream } from "react-icons/md";
 import Comments from '../comments/Comments'
-import { comments, dummyMovies } from '@/lib'
 import MovieCard from '../movie/MovieCard'
+import moment from 'moment'
+import { handleFetch } from '@/lib/data'
+import { useRouter } from 'next/navigation'
 
 
 const streams = [
@@ -30,16 +32,34 @@ const streams = [
     },
 ]
 
-const Player = ({data}) => {
-    const [currentStream, setCurrentStream] = useState(streams[0].link)
+const Player = ({data, moreMovies, slug}) => {
+    const [currentStream, setCurrentStream] = useState(data?.stream[0]?.videoLink)
+    const [isLoading, setIsLoading] = useState(false)
+    const [comments, setComments] = useState([])
+    const {push} = useRouter()
 
     const handleChangeStream = (url) =>{
-        console.log(url)
         setCurrentStream(url)
     }
+
+    const fetchComments = async ()=>{
+        const res = await handleFetch(`/movies/comment?id=${data?._id}`,'GET','','',setIsLoading)
+        setComments(res?.data)
+    }
+    useEffect(()=>{
+        fetchComments()
+    },[data])
+
+    useEffect(()=>{
+        if(!slug || slug === '' || slug === 'undefined' || slug === null){
+            push('/')
+        }
+    },[data])
+
+
   return (
-    <div className='w-full md:py-12 py-3'>
-        <PageBg image={data?.image}/>
+    <div className='w-full py-2'>
+        <PageBg image={data?.imageLink}/>
         <div className='w-full flex flex-col gap-4'>
 
             {/* MOVIE PLAYER */}
@@ -62,7 +82,7 @@ const Player = ({data}) => {
                                     <MdOutlineBookmarkBorder size={18}/>
                                 </button>
                             </div>
-                            <Image src={data?.image} alt={data?.title}
+                            <Image src={data?.imageLink} alt={data?.title || 'Title'}
                             width={300} height={300}
                             className='w-full h-full md:object-cover object-contain'/>
                         </div>
@@ -70,53 +90,53 @@ const Player = ({data}) => {
                         <div className='flex flex-col items-start md:gap-2 gap-1 md:max-w-[250px] w-full'>
                             <h2 className='font-semibold md:text-sm 
                             text-xs text-primaryText'>
-                                IMDB ID: 1483782
+                                IMDB ID: {data?.movieId}
                             </h2>
                             <h2 className='flex items-center gap-1 font-semibold md:text-sm 
                             text-xs text-primaryText'>
-                                Director: <span className='text-main'>Vince Gilligan</span>
+                                Quality: <span className='text-main'>{data?.graphics}</span>
                             </h2>
                             <h2 className='flex items-start gap-1 font-semibold md:text-sm 
                             text-xs text-primaryText'>
                                 Cast: <span className='text-main'>
-                                    Brian Cranston, Jesse Plemons, Matt Jones, Jonathan Banks, 
-                                    Charles Baker, Tess Harper
+                                    {data?.cast?.slice(0, 50)}
                                 </span>
                             </h2>
                             <h2 className='flex items-center gap-1 font-semibold md:text-sm 
                             text-xs text-primaryText'>
-                                Genre: <span className='text-main'>Action,Triler</span>
+                                Genre: <span className='text-main'>{data?.genre}</span>
                             </h2>
                             <h2 className='font-semibold md:text-sm 
                             text-xs text-primaryText'>
-                                Release Date: 12/19/2120
+                                Release Date: {moment(data?.releaseData).format('DD MMMM, YYYY')}
                             </h2>
                             <div className='p-3 bg-primary rounded-lg max-h-[150px] 
                             overflow-y-auto text-sm text-primaryText'>
-                                {data?.description}
+                                {data?.overview}
                             </div>
                             <ShareButton/>
                         </div>
                         {/* MOVIE PLAYER */}
                         <div className='flex-1 flex flex-col items-start gap-3'>
                             <iframe src={currentStream} frameborder="0"
-                            className='w-full min-h-[400px] border-2 border-green-500'></iframe>
+                            className='w-full min-h-[400px] border-2 border-main rounded-lg'></iframe>
                             <div className='w-full flex flex-col items-end justify-end gap-1'>
                                 <h1 className='text-sm text-secondaryText font-semibold'>
                                     Video Stream
                                 </h1>
                                 <div className='w-full flex items-end justify-end gap-2'>
                                     {
-                                        streams?.map((item, i)=>(
-                                            <button onClick={()=>handleChangeStream(item.link)}
+                                        data?.stream?.map((item, i)=>(
+                                            <button key={i}
+                                            onClick={()=>handleChangeStream(item?.videoLink)}
                                             className={`py-2 px-5 text-xs border-2 
                                             border-main rounded-3xl transition-all duration-300 
                                             ease-in-out hover:bg-main flex items-center gap-2 ${
-                                                currentStream === item.link ? 'bg-main text-secondaryText' 
+                                                currentStream === item?.videoLink ? 'bg-main text-secondaryText' 
                                                 : 'bg-primary text-primaryText'
                                             }`}>
                                                 <MdOutlineStream size={16}/>
-                                                {item.name}
+                                                {item?.title}
                                             </button>
                                         ))
                                     }
@@ -128,8 +148,8 @@ const Player = ({data}) => {
                                 </h1>
                                 <div className='w-full flex items-end justify-end gap-4'>
                                     {
-                                        streams?.map((item, i)=>(
-                                            <DownloadBtn key={i} title={item.name} href={item.link}/>
+                                        data?.stream?.map((item, i)=>(
+                                            <DownloadBtn key={i} title={item?.title} href={item?.downloadLink}/>
                                         ))
                                     }
                                 </div>
@@ -147,7 +167,7 @@ const Player = ({data}) => {
                     pb-2 border-b border-primary'>
                         Comments
                     </h1>
-                    <Comments data={comments}/>
+                    <Comments data={comments} fetchComments={fetchComments} movieId={data?._id}/>
                 </div>
 
                 {/* ALSO LIKE */}
@@ -158,7 +178,7 @@ const Player = ({data}) => {
                     </h1>
                     <div className='w-full grid grid-cols-2 gap-3
                     border border-primary p-4 rounded-lg'>
-                        {dummyMovies.slice(0, 6).map((item, i)=>(
+                        {moreMovies?.slice(0, 6).map((item, i)=>(
                             <MovieCard data={item} key={i}/>
                         ))}
                     </div>

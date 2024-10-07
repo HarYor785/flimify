@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import {usePathname, useRouter} from 'next/navigation'
+import {usePathname, useRouter, useSearchParams} from 'next/navigation'
 import Link from 'next/link'
 import { IoMdArrowDropdown } from "react-icons/io";
 import Input from '../ui/Input';
@@ -17,7 +17,8 @@ import { CiSquareQuestion } from "react-icons/ci";
 import {toast} from 'react-toastify'
 import { handleRemoveUser } from '@/states/userSlice';
 import Request from '../request/Request';
-
+import logo from '@images/logo.png'
+import Image from 'next/image';
 
 const NavLink = ({href, title, icon: Icon, left, right, onClick}) =>{
   const pathname = usePathname()
@@ -47,8 +48,8 @@ const SubNavbar = ({openSubNav, setOpenSubNav, handleOpenRequest, dispatch}) => 
         shadow-md p-4 transition-all duration-300 ease-in-out animate-zoom-in">
           <NavLink href="/profile" title="Profile" icon={RiAccountPinBoxLine} left={true}/>
           <NavLink href="/watchlist" title="Watchlist" icon={GoBookmark} left={true}/>
-          <NavLink href="#" title="Request" icon={CiSquareQuestion} left={true} onClick={handleOpenRequest}/>
-          {/* <NavLink href="/category/bollywood" title="Settings" icon={IoSettingsOutline } left={true}/> */}
+          <NavLink href="#" title="Request" icon={CiSquareQuestion} left={true} 
+          onClick={handleOpenRequest}/>
           <NavLink href="/#" title="Logout" icon={TbLogout} left={true}
           onClick={()=>dispatch(handleRemoveUser)}/>
         </div>
@@ -57,6 +58,7 @@ const SubNavbar = ({openSubNav, setOpenSubNav, handleOpenRequest, dispatch}) => 
 }
 
 const Navbar = () => {
+  const {user} = useSelector((state)=>state.user)
   const [open, setOpen] = useState(false)
   const [openRequest, setOpenRequest] = useState(false)
   const [openSearch, setOpenSearch] = useState(false)
@@ -64,8 +66,13 @@ const Navbar = () => {
   const [openSubNav, setOpenSubNav] = useState(false)
   const [value, setValue] = useState('')
   const {push} = useRouter()
-  const {user} = useSelector((state)=>state.user)
   const dispatch = useDispatch()
+  const [mounted, setMounted] = useState(false);
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(()=>{
     const handleResize = () =>{
@@ -88,8 +95,9 @@ const Navbar = () => {
       toast.info('Enter atleast 3 characters')
       return
     }
-    push(`/search?q=${value}`)
+    push(`/search?search_query=${value}`)
   }
+  
 
   const iconOnclick = () => {
     if (isMobileSearch) {
@@ -102,6 +110,12 @@ const Navbar = () => {
   const handleOpenRequest = () =>{
     setOpenSubNav(false)
     setOpenRequest(true)
+  }
+
+  const handlePushLogin = ()=>{
+    const lastUrl = window.location.href
+    localStorage.setItem('lastUrl', lastUrl)
+    push('/login')
   }
 
   return (
@@ -124,7 +138,9 @@ const Navbar = () => {
             <div className="flex md:items-center items-start gap-12">
               {/* LOGO */}
               <Link href={'/'} className="text-3xl text-secondaryText font-bold uppercase">
-                FLI<span className="text-main">MIFY</span>
+                <Image src={logo} alt='Flimify Logo'
+                width={150} height={150}
+                className=''/>
               </Link>
 
               {/* LINKS */}
@@ -174,16 +190,17 @@ const Navbar = () => {
                 placeHolder="Search..."
                 value={value}
                 onChange={(e)=>setValue(e.target.value)}
-                icon={BiSearch} iconclassName={`text-xl cursor-pointer`} 
+                icon={BiSearch} iconClass={`text-xl cursor-pointer`} 
                 iconOnclick={iconOnclick}
               />
               {
-                user?.token ? (
-                  <Button title={isMobileSearch ? '' : (user?.userName || 'Ayo')}
+                user?.token && mounted ? (
+                  <Button title={isMobileSearch ? '' : (user?.userName)}
                   icon={isMobileSearch ? FaRegUser : null}
                   onClick={()=>setOpenSubNav(!openSubNav)}/>
                 ) : (
-                  <Button title={'Login'} onClick={()=>push('/login')}
+                  <Button title={'Login'} 
+                  onClick={handlePushLogin}
                   className={`md:block hidden`}/>
                 )
               }
@@ -198,10 +215,13 @@ const Navbar = () => {
       </div>
 
       {/* SUB NAVBAR */}
-      <SubNavbar openSubNav={openSubNav} 
-      setOpenSubNav={setOpenSubNav}
-      handleOpenRequest={handleOpenRequest}
-      dispatch={dispatch}/>
+      {
+        openSubNav &&
+        <SubNavbar openSubNav={openSubNav} 
+        setOpenSubNav={setOpenSubNav}
+        handleOpenRequest={handleOpenRequest}
+        dispatch={dispatch}/>
+      }
 
       {/* MOBILE SEARCH */}
       {

@@ -1,4 +1,26 @@
 
+
+export const getLatestMoviesByCategory = (data)=>{
+  if (!Array.isArray(data) || data.length === 0) {
+    return []; 
+  }
+
+  const groupCategory = data?.reduce((acc, movie)=>{
+    if(!acc[movie?.category]){
+      acc[movie?.category] = []
+    }
+    acc[movie?.category].push(movie)
+    return acc
+  }, {})
+
+  const latesMovies = Object.keys(groupCategory)?.map((category)=>{
+    const sortedMovies = groupCategory[category]?.sort((a, b)=>new Date(b?.createdAt) - new Date(a?.createdAt))
+    return sortedMovies?.slice(0, 3)
+  }) 
+
+  return latesMovies?.flat() || []
+}
+
 export const genreOptions = [
     { label: 'All', value: 'All' },
     { label: 'Action', value: 'Action' },

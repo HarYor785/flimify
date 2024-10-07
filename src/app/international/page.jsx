@@ -4,6 +4,7 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { dummyMovies } from '@/lib';
 import Head from 'next/head';
+import { handleFetch } from '@/lib/data';
 
 
 export const metadata = {
@@ -40,8 +41,15 @@ export const metadata = {
 };
   
 
+export async function fetchMovies(query){
+    function setIsLoading(){}
+    const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+    return res?.data
+}
+
 export default async function page() {
-  const pageTitle = 'Hollywood Movies - Watch International Blockbusters Online';
+    const movieData = await fetchMovies('hollywood')
+    const pageTitle = 'Hollywood Movies - Watch International Blockbusters Online';
     const pageDescription = 'Stream the latest and most popular Hollywood movies. Explore a vast collection of international blockbusters, from action-packed thrillers to heartwarming dramas. Stay updated with new releases and timeless classics, available for online viewing.';
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/international`; 
     const pageImage = `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`;
@@ -62,7 +70,7 @@ export default async function page() {
             "description": movie?.description,
         }))
     };
-
+    console.log(movieData)
   return (
     <>
         <Head>
@@ -89,7 +97,7 @@ export default async function page() {
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'International'} />
-                    <Category data={dummyMovies} />
+                    <Category data={movieData} />
                 </div>
             </section>
         </Container>

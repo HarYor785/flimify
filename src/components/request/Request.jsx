@@ -1,12 +1,19 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Modal from '../modal/Modal'
 import Input from '../ui/Input'
 import { useForm } from 'react-hook-form'
 import Button from '../ui/Button'
 import { RiCloseLargeLine } from "react-icons/ri";
+import { handleFetch } from '@/lib/data'
+import { toast } from 'react-toastify'
+import { useSelector } from 'react-redux'
 
 
 const Request = ({isOpen, setOpenRequest}) => {
+    const {user} = useSelector((state)=>state.user)
+    const [isLoading, setIsLoading] = useState(false)
     const {register, handleSubmit, formState:{errors}, reset} = useForm({
         mode: 'onChange'
     })
@@ -16,7 +23,13 @@ const Request = ({isOpen, setOpenRequest}) => {
     }
 
     const onsubmit = async (data) => {
-        console.log(data)
+        const res = await handleFetch(`/request`,'POST',user?.token,data,setIsLoading)
+        if(res?.success){
+            toast.success(res?.message)
+            reset()
+        }else{
+            toast.error(res?.message)
+        }
     }
 
   return (
@@ -36,13 +49,13 @@ const Request = ({isOpen, setOpenRequest}) => {
             </p>
             <form onSubmit={handleSubmit(onsubmit)}
             className='w-full flex flex-col gap-3'>
-                <Input type="text" name="name" label="Movie Name"
-                {...register('name',{
+                <Input type="text" name="title" label="Movie Name"
+                {...register('title',{
                     required: 'This field is required!'
                 })}
                 placeHolder="Enter movie title">
-                    {errors.name && <span className='text-xs text-red-600'>
-                        {errors.name.message}
+                    {errors.title && <span className='text-xs text-red-600'>
+                        {errors.title.message}
                     </span>}
                 </Input>
                 <Input type="number" name="season" label="Season (Optional)"
@@ -53,7 +66,8 @@ const Request = ({isOpen, setOpenRequest}) => {
                     </span>}
                 </Input>
 
-                <Button title={'Submit'} className={'mt-6'}/>
+                <Button title={isLoading ? 'Loading' :'Submit'} 
+                className={'mt-6'} disabled={isLoading}/>
             </form>
         </div>
     </Modal>

@@ -4,6 +4,7 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { dummyMovies } from '@/lib';
 import Head from 'next/head';
+import { handleFetch } from '@/lib/data';
 
 export const metadata = {
     title: 'Bollywood Movies - Discover and Watch Popular Indian Films | Flimify',
@@ -37,9 +38,15 @@ export const metadata = {
         },
     ],
 };
-  
+
+export async function fetchMovies(query){
+    function setIsLoading(){}
+    const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+    return res?.data
+  }
 
 export default async function page() {
+    const movieData = await fetchMovies('bollywood')
     const pageTitle = 'Bollywood Movies - Watch Indian Blockbusters Online';
     const pageDescription = 'Dive into the world of Bollywood with our collection of the latest and greatest Indian movies. Enjoy a wide range of genres, from romantic dramas to thrilling action films. Watch new releases and classic hits from the heart of Indian cinema.';
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/bollywood`; 
@@ -88,7 +95,7 @@ export default async function page() {
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'Bollywood'} />
-                    <Category data={dummyMovies} />
+                    <Category data={movieData} />
                 </div>
             </section>
         </Container>

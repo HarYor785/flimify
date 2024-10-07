@@ -4,6 +4,7 @@ import React from 'react'
 import Category from '@/components/category/Category'
 import { dummyMovies } from '@/lib'
 import Head from 'next/head'
+import { handleFetch } from '@/lib/data'
 
 
 export const metadata = {
@@ -38,9 +39,15 @@ export const metadata = {
         },
     ],
 };
-  
+
+export async function fetchMovies(query){
+    function setIsLoading(){}
+    const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+    return res?.data
+}
 
 export default async function page(){
+    const movieData = await fetchMovies('tv-Series')
     const pageTitle = 'Tv-Series - Watch Online';
     const pageDescription = 'Explore the latest and most popular TV series on Flimify. Watch your favorite shows online from a variety of genres.';
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/tv-series`; 
@@ -89,7 +96,7 @@ export default async function page(){
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'Tv-Series'}/>
-                    <Category data={dummyMovies}/>
+                    <Category data={movieData}/>
                 </div>
             </section>
         </Container>

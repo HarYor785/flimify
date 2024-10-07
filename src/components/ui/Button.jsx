@@ -5,7 +5,8 @@ const Button = ({title,className,icon: Icon, iconSIze, ...props}) => {
     <button
     className={`py-2 px-4 text-sm text-secondaryText bg-secondary 
     border-2 border-main rounded-md uppercase hover:bg-main 
-    hover:bg-opacity-10 transition-all duration-500 ease-in-out ${className}`}
+    hover:bg-opacity-10 transition-all duration-500 ease-in-out 
+    disabled:cursor-not-allowed disabled:bg-opacity-50 ${className}`}
     {...props}
     >
         {Icon && <Icon size={iconSIze} />}

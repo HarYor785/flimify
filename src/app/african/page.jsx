@@ -4,6 +4,7 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { dummyMovies } from '@/lib';
 import Head from 'next/head';
+import { handleFetch } from '@/lib/data';
 
 export const metadata = {
   title: 'African Movies - Discover and Watch Top African Films | Flimify',
@@ -38,8 +39,15 @@ export const metadata = {
   ],
 };
 
+export async function fetchMovies(query){
+  function setIsLoading(){}
+  const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+  return res?.data
+}
+
 
 export default async function page() {
+  const movieData = await fetchMovies('african')
   const pageTitle = 'African Movies - Explore the Best of African Cinema';
   const pageDescription = 'Experience the richness of African cinema with our collection of top African movies. Discover films from Nollywood, Ghollywood, and more, spanning genres like drama, comedy, and historical epics. Stay updated with the latest releases and timeless classics from across Africa.';
   const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/african`; 
@@ -88,7 +96,7 @@ export default async function page() {
           <section className='py-10'>
               <div className='w-full flex flex-col gap-10'>
                 <Heading page={'African'} />
-                <Category data={dummyMovies} />
+                <Category data={movieData} />
               </div>
           </section>
         </Container>

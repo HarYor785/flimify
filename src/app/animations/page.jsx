@@ -4,6 +4,7 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { dummyMovies } from '@/lib';
 import Head from 'next/head';
+import { handleFetch } from '@/lib/data';
 
 export const metadata = {
   title: 'Animation Movies - Discover and Watch the Best Animated Films | Flimify',
@@ -38,7 +39,14 @@ export const metadata = {
   ],
 };
 
+export async function fetchMovies(query){
+  function setIsLoading(){}
+  const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+  return res?.data
+}
+
 export default async function page() {
+  const movieData = await fetchMovies('animation')
   const pageTitle = 'Animation Movies - Watch the Best Animated Films Online';
   const pageDescription = 'Discover a fantastic collection of animated movies, from family-friendly adventures to visually stunning masterpieces. Explore a wide range of animation styles, including 2D, 3D, and stop-motion, featuring beloved classics and the latest releases from top studios.';
   const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/animations`; 
@@ -87,7 +95,7 @@ export default async function page() {
         <section className='py-10'>
           <div className='w-full flex flex-col gap-10'>
             <Heading page={'Animation'} />
-            <Category data={dummyMovies} />
+            <Category data={movieData} />
           </div>
         </section>
       </Container>

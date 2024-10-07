@@ -4,9 +4,9 @@ import viewBg from '@images/view-bg.png'
 import PageBg from "@/components/pageBg/PageBg";
 import CustomSwiper from "@/components/swiper/CustomSwiper";
 import MovieCard from "@/components/movie/MovieCard";
-import { dummyMovies } from "@/lib";
+import { getLatestMoviesByCategory } from "@/lib";
 import Tabs from "@/components/tabs/Tabs";
-import { fetchComingSoon } from "@/lib/data";
+import { fetchComingSoon, handleFetch } from "@/lib/data";
 import moment from "moment";
 import Link from "next/link";
 import Head from "next/head";
@@ -59,7 +59,7 @@ export const metadata = {
     icon: '/favicon.ico',
     appleTouchIcon: '/apple-touch-icon.png', 
   },
-  manifest: '/site.webmanifest', 
+  // manifest: '/site.webmanifest', 
 };
 
 const TabContent = ({movie}) =>{
@@ -68,7 +68,7 @@ const TabContent = ({movie}) =>{
     <div className="grid grid-cols-2 md:grid-cols-6 sm:grid-cols-4 
     md:gap-6 gap-4">
       {
-        movie.map((item, i)=>(
+        movie?.map((item, i)=>(
           <MovieCard data={item} key={i}/>
         ))
       }
@@ -76,28 +76,41 @@ const TabContent = ({movie}) =>{
   )
 }
 
-const tabsArray = [
-  {
-    title: 'Movies',
-    content: <TabContent movie={dummyMovies}/>
-  },
-  {
-    title: 'African',
-    content: <TabContent movie={dummyMovies}/>
-  },
-  {
-    title: 'Animations',
-    content: <TabContent movie={dummyMovies}/>
-  },
-  {
-    title: 'Bollywood',
-    content: <TabContent movie={dummyMovies}/>
-  },
-]
+export async function fetchMovies(query){
+  function setIsLoading(){}
+  const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+  return res?.data
+}
 
 export const revalidate = 0
 export default async function Home() {
   const data = await fetchComingSoon()
+  const movieData = await fetchMovies('all')
+  const latestMovies = getLatestMoviesByCategory(movieData)
+
+  const hollywoodMovie  = movieData?.filter((item)=>item?.category === 'Hollywood')
+  const bollywoodMovie  = movieData?.filter((item)=>item?.category === 'Bollywood')
+  const animationMovie  = movieData?.filter((item)=>item?.category === 'Animation')
+  const africaMovie  = movieData?.filter((item)=>item?.category === 'African')
+
+  const tabsArray = [
+    {
+      title: 'Movies',
+      content: <TabContent movie={hollywoodMovie}/>
+    },
+    {
+      title: 'African',
+      content: <TabContent movie={africaMovie}/>
+    },
+    {
+      title: 'Animations',
+      content: <TabContent movie={animationMovie}/>
+    },
+    {
+      title: 'Bollywood',
+      content: <TabContent movie={bollywoodMovie}/>
+    },
+  ]
   
   const pageTitle = 'Flimify - Watch the Best Movies Online';
   const pageDescription = 'Welcome to your ultimate destination for watching movies online. Explore a vast collection of movies across all genres including action, drama, comedy, thriller, and more. Stay updated with the latest releases, trending movies, and classic hits from around the world.';
@@ -113,7 +126,7 @@ export default async function Home() {
     "image": pageImage,
     "potentialAction": {
       "@type": "SearchAction",
-      "target": `${pageUrl}/search?q={search_term_string}`,
+      "target": `${pageUrl}/search?search_query={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
@@ -156,7 +169,7 @@ export default async function Home() {
               </h1>
               <CustomSwiper>
                 {
-                  dummyMovies.map((item,i)=>(
+                  latestMovies?.map((item,i)=>(
                     <MovieCard data={item} key={i}/>
                   ))
                 }

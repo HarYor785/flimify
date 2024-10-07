@@ -2,17 +2,27 @@
 
 import Button from '@/components/ui/Button'
 import Input from '@/components/ui/Input'
-import React from 'react'
+import { handleFetch } from '@/lib/data'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 const ContactForm = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const {register, handleSubmit, formState:{errors}, reset} = useForm({
         mode: "onChange"
     })
 
-    const onsubmit = async (data)=>{
-        console.log(data)
+    const onsubmit = async (data) => {
+        const res = await handleFetch(`/contact`,'POST','',data,setIsLoading)
+        if(res?.success){
+            toast.success(res?.message)
+            reset()
+        }else{
+            toast.error(res?.message)
+        }
     }
+
   return (
     <form onSubmit={handleSubmit(onsubmit)}
     className='p-6 flex flex-col w-full gap-4 items-start border 
@@ -71,7 +81,8 @@ const ContactForm = () => {
             )}
         </div>
 
-        <Button title={'Submit'}/>
+        <Button title={isLoading ? 'Loading' : 'Submit'}
+        disabled={isLoading}/>
     </form>
   )
 }

@@ -14,7 +14,7 @@ const Pagination = ({ data, setData, itemsPerPage }) => {
         const currentItems = data?.length > 0 ? data?.slice(startIndex, endIndex) : []
         setData(currentItems);
         // Dependencies to prevent infinite loop
-    }, [itemsPerPage, currentPage]);
+    }, [itemsPerPage, currentPage, ]);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);

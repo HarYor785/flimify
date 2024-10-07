@@ -4,6 +4,7 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { dummyMovies } from '@/lib';
 import Head from 'next/head';
+import { fetchMovies } from '@/lib/data';
 
 export const metadata = {
     title: 'K-Drama - Discover and Watch the Best Korean Dramas | Flimify',
@@ -40,6 +41,7 @@ export const metadata = {
   
 
 export default async function page() {
+    const movieData = await fetchMovies('K-Drama')
     const pageTitle = 'K-Drama - Watch Korean Dramas Online';
     const pageDescription = 'Discover and stream the latest and most popular Korean dramas (K-Drama). Enjoy a wide selection of romantic, thriller, and historical K-Dramas with English subtitles. Stay updated with new episodes and trending shows.';
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/k-drama`; 
@@ -88,7 +90,7 @@ export default async function page() {
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'K-Drama'} />
-                    <Category data={dummyMovies} />
+                    <Category data={movieData} />
                 </div>
             </section>
         </Container>

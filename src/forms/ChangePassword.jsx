@@ -1,15 +1,26 @@
-import React from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import Input from '@/components/ui/Input'
 import { useForm } from 'react-hook-form'
 import Button from '@/components/ui/Button'
+import { handleFetch } from '@/lib/data'
+import { toast } from 'react-toastify'
 
 
-const ChangePassword = () => {
+const ChangePassword = ({user}) => {
+    const [isLoading, setIsLoading] = useState(false)
     const {register, handleSubmit, formState:{errors},reset,getValues} = useForm({
         mode: "onChange"
     })
     const onsubmit = async (data) => {
-        console.log(data)
+        const res = await handleFetch(`/profile`,'POST',user?.token,data,setIsLoading)
+        if(res?.success){
+            toast.success(res?.message)
+            reset()
+        }else{
+            toast.error(res?.message)
+        }
     }
   return (
     <div className='w-full relative'>
@@ -57,7 +68,9 @@ const ChangePassword = () => {
                 </Input>
             </div>
 
-            <Button title={'Submit'} className={'mt-8 self-start w-fit'}/>
+            <Button title={isLoading ? 'Loading' : 'Submit'} 
+            disabled={isLoading}
+            className={'mt-8 self-start w-fit'}/>
         </form>
     </div>
   )

@@ -50,9 +50,14 @@ export const metadata = {
   ],
   icons: {
     icon: '/favicon.ico',
-    appleTouchIcon: '/apple-touch-icon.png', 
+    appleTouchIcon: '/favicon.ico', 
   },
-  manifest: '/site.webmanifest', 
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+  // manifest: '/site.webmanifest', 
 };
 
 export default function RootLayout({ children }) {
@@ -71,7 +76,7 @@ export default function RootLayout({ children }) {
     "image": pageImage,
     "potentialAction": {
       "@type": "SearchAction",
-      "target": `${pageUrl}/search?q={search_term_string}`,
+      "target": `${pageUrl}/search?query={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
