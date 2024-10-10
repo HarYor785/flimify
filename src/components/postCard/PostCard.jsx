@@ -198,7 +198,7 @@ const PostCard = ({item, user, fetchPosts}) => {
         }
         {
             videoItems?.length > 0 &&
-            <DynamicVideoPlayer playerRef={playerRef} videoSrc={videoItems}/>
+            <DynamicVideoPlayer playerRef={playerRef} videoSrc={videoItems[0]}/>
         }
 
         {
