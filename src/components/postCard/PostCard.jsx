@@ -5,17 +5,16 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import Comment from '../posts/Comment';
 import avatar from '@images/user.png'
 import moment from 'moment';
-import { BsSave, BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { toast } from 'react-toastify';
 import { handleFetch } from '@/lib/data';
 import { IoMdCheckmark } from "react-icons/io";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import cloudinary from 'cloudinary-video-player/all';
-import 'cloudinary-video-player/cld-video-player.min.css';
-import "cloudinary-video-player/cld-video-player.min.css";
-import 'cloudinary-video-player/chapters';
-import 'cloudinary-video-player/playlist';
+import dynamic from 'next/dynamic';
+
+
+const DynamicVideoPlayer = dynamic(() => import('../videoplayer/VideoPlayer'), { ssr: false });
 
 
 function srcset(image, size, rows = 1, cols = 1) {
@@ -34,7 +33,6 @@ const PostCard = ({item, user, fetchPosts}) => {
     const [isPendingLike, setIsPendingLike] = useState(false)
     const [loadingComment, setLoadingComment] = useState(false)
     const [comments, setComments] = useState([])
-    const cloudinaryRef = useRef();
     const playerRef = useRef();
 
     const handleOpenMenu = (val)=>{
@@ -127,19 +125,6 @@ const PostCard = ({item, user, fetchPosts}) => {
         !data?.img?.includes('video')
     );
 
-    useEffect(() => {
-        if (cloudinaryRef.current) return;
-
-        cloudinaryRef.current = cloudinary;
-        if(typeof window !== 'undefined' && videoItems?.length > 0){
-            const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
-            cloud_name: 'dgnb2e0te',
-            secure: true,
-            controls: true,
-            });
-            player.source(videoItems[0]);
-        }
-    }, [videoItems]);
 
 
     return (
@@ -213,11 +198,7 @@ const PostCard = ({item, user, fetchPosts}) => {
         }
         {
             videoItems?.length > 0 &&
-            <video
-            ref={playerRef}
-            id={'doc-player'}
-            style={{ width: '100%', height: '400px' }}
-            />
+            <DynamicVideoPlayer playerRef={playerRef} videoSrc={videoItems}/>
         }
 
         {
