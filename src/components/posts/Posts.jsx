@@ -17,12 +17,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaXmark } from "react-icons/fa6";
 import { LuLoader } from "react-icons/lu";
+import Loader from '../loader/Loader';
 
 
 
-
-
-const Posts = ({moviePosts, fetchPosts})=> {
+const Posts = ()=> {
     const [value, setValue] = useState('')
     const {user} = useSelector((state)=>state.user)
     const {post} = useSelector((state)=>state.post)
@@ -35,7 +34,7 @@ const Posts = ({moviePosts, fetchPosts})=> {
     const handlePickEmoji = (emojiObject, event) => {
         const emoji = emojiObject.emoji
         setValue(value + emoji)
-        setOpenEmoji(false)
+        // setOpenEmoji(false)
     }
 
     const handleFileChange = (e) => {
@@ -75,15 +74,20 @@ const Posts = ({moviePosts, fetchPosts})=> {
         setPreviewUrls(updatedPreviewUrls);
     };
 
-    // const fetchPosts = async ()=>{
-    //     const res = await handleFetch(`/post`,'GET','','',setIsLoading)
-    // }
+    const fetchPosts = async ()=>{
+        const res = await handleFetch(`/post`,'GET','','',setIsLoading)
+        dispatch(handleAddPost(res?.data))
+    }
     
     useEffect(()=>{
-        dispatch(handleAddPost(moviePosts))
-    },[moviePosts])
+        fetchPosts()
+    },[])
 
     const handleCreatePost = async ()=>{
+        if(!user?.token){
+            toast.error('You must be logged in to create a post.')
+            return
+        }
         if(value.length >= 3){
             let img;
             const uploadedFile = []
@@ -121,7 +125,8 @@ const Posts = ({moviePosts, fetchPosts})=> {
 
     return (
         <div className="w-full gap-6 relative md:grid md:grid-cols-3 
-        max-h-screen overflow-y-auto md:flex-none flex flex-col-reverse"
+        min-h-screen max-h-screen overflow-y-auto md:flex-none 
+        flex flex-col-reverse"
         onClick={()=>setOpenEmoji(false)}>
             {/* LEFT */}
             <div className='w-full flex flex-col items-center gap-8 relative md:col-span-2'>
@@ -131,8 +136,13 @@ const Posts = ({moviePosts, fetchPosts})=> {
                         <div className='w-full flex items-center gap-4'>
                             <Image src={user?.profile || avatar} width={50} height={50} 
                             className="rounded-full object-cover border-2 border-main"/>
-                            <Input type="text" placeHolder="Create a post"
-                            value={value} onChange={(e)=>setValue(e.target.value)}/>
+                            <textarea name="post" placeHolder="Create a post"
+                            className='w-full text-secondaryText md:text-sm text-xs p-2 
+                            outline-none bg-primary rounded-xl resize-none transition-all 
+                            duration-300 ease-in-out border-2 border-secondary 
+                            focus:border-2 focus:border-main'
+                            value={value} onChange={(e)=>setValue(e.target.value)}></textarea>
+                            {/* <Input type="text" /> */}
                         </div>
                         <div className='w-full flex items-center justify-between'>
                             <div className='flex items-center gap-4'>
@@ -189,7 +199,7 @@ const Posts = ({moviePosts, fetchPosts})=> {
                             </div>
                         }
                 </div>
-                    
+                    {isLoading && <Loader/>}
                 {/* POSTS */}
                 <div className=" w-full flex flex-col items-center gap-4">
                     {post?.map((item, i)=>(
@@ -215,21 +225,14 @@ const Posts = ({moviePosts, fetchPosts})=> {
                         350 x 280
                     </span>
                 </div>
-                {/* <div className='w-full md:flex hidden'>
-                    {
-                        moviePosts.slice(0,1).map((item, i)=>(
-                            <div key={i} className='w-full relative flex flex-col items-start gap-3
-                            p-3 bg-primary rounded-md shadow-md'>
-                                <Image src={item.imageUrl} 
-                                alt={item.title} width={500} height={500}
-                                className='w-full h-[300px] object-cover rounded-md'/>
-                                <h2 className='text-base text-white'>
-                                    {item.title}
-                                </h2>
-                            </div>
-                        ))
-                    }
-                </div> */}
+                <div className='w-full h-[300px] bg-primary rounded-md flex items-center 
+                justify-center'>
+                    <span className="text-lg text-white text-center">
+                        Advertise banner <br/>
+                        350 x 280
+                    </span>
+                </div>
+                
             </div>
         </div>
     )

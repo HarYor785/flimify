@@ -131,7 +131,7 @@ const PostCard = ({item, user, fetchPosts}) => {
         if (cloudinaryRef.current) return;
 
         cloudinaryRef.current = cloudinary;
-        if(videoItems?.length > 0){
+        if(typeof window !== 'undefined' && videoItems?.length > 0){
             const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
             cloud_name: 'dgnb2e0te',
             secure: true,
@@ -139,7 +139,7 @@ const PostCard = ({item, user, fetchPosts}) => {
             });
             player.source(videoItems[0]);
         }
-    }, []);
+    }, [videoItems]);
 
 
     return (

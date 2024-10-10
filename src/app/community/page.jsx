@@ -1,9 +1,7 @@
 import Container from '@/components/container/Container'
-import Posts from '@/components/posts/Posts';
-import { moviePosts } from '@/lib';
-import { handleFetch } from '@/lib/data';
+import Posts from '@/components/posts/Posts'
 import React from 'react'
-''
+
 
 export const metadata = {
     title: 'Flimify Movie Community - Latest News and Discussions',
@@ -73,21 +71,13 @@ export const metadata = {
     // manifest: '/site.webmanifest',
   };
 
-export async function fetchPosts(){
-    function setIsLoading(){}
-    const res = await handleFetch(`/post`,'GET','','',setIsLoading)
-    return res?.data
-}
-
-export const revalidate = 0
-export default async function page(){
-    const data = await fetchPosts()
+const page = ()=>{
     return (
     <>
         <Container>
             <section className='w-full flex flex-col gap-4'>
                 <div className='w-full py-4 relative'>
-                    <Posts moviePosts={data} fetchPosts={fetchPosts}/>
+                    <Posts/>
                 </div>
             </section>
         </Container>
@@ -95,3 +85,4 @@ export default async function page(){
   )
 }
 
+export default page
