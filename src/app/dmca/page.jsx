@@ -2,7 +2,77 @@ import Container from '@/components/container/Container'
 import Heading from '@/components/heading/Heading'
 import React from 'react'
 
-
+export const metadata = {
+    title: {
+      default: 'DMCA Policy - Flimify | Digital Millennium Copyright Act Compliance',
+      template: '%s | Flimify',
+    },
+    description:
+      'Flimify adheres to the Digital Millennium Copyright Act (DMCA). Learn how to submit a copyright infringement notice and our policies for handling claims.',
+    keywords:
+      'DMCA Policy, Copyright Infringement, DMCA Compliance, Copyright Notice, Flimify Copyright Policy, Digital Millennium Copyright Act, DMCA Takedown, Copyright Claims',
+    authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+    creator: 'Flimify Tv',
+    publisher: 'Flimify Tv',
+    openGraph: {
+      title: 'DMCA Policy - Flimify | Digital Millennium Copyright Act Compliance',
+      description:
+        'Review Flimify’s DMCA policy, which outlines the steps to report copyright infringement and how we handle takedown requests in accordance with the law.',
+      url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/dmca`,
+      image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+      type: 'website',
+      siteName: 'Flimify',
+      locale: 'en_US',
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/dmca`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'DMCA Policy - Flimify | Digital Millennium Copyright Act Compliance',
+      description:
+        'Flimify’s DMCA policy ensures compliance with copyright laws. Learn how to report any copyright violations and our process for addressing claims.',
+      image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: false,
+        'max-snippet': -1,
+        'max-image-preview': 'large',
+        'max-video-preview': -1,
+      },
+    },
+    additionalMetaTags: [
+      {
+        name: 'author',
+        content: 'Flimify',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+      {
+        name: 'theme-color',
+        content: '#1a191f',
+      },
+    ],
+    icons: {
+      icon: '/favicon.ico',
+      appleTouchIcon: '/favicon.ico',
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+    // manifest: '/site.webmanifest',
+  };
+  
 
 const page = () => {
   return (

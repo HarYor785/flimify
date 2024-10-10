@@ -2,8 +2,6 @@ import Container from '@/components/container/Container'
 import Heading from '@/components/heading/Heading'
 import React from 'react'
 import Category from '@/components/category/Category'
-import { dummyMovies } from '@/lib'
-import Head from 'next/head'
 import { handleFetch } from '@/lib/data'
 
 
@@ -11,6 +9,9 @@ export const metadata = {
     title: 'TV Series - Discover and Watch the Latest TV Shows | Flimify',
     description: 'Explore our collection of TV series, including the latest releases and classic favorites. Find detailed information, watch episodes, and stay updated with the newest TV shows on Flimify.',
     keywords: 'TV Series, Latest TV Shows, Watch TV Series, TV Series Reviews, New TV Shows, Popular TV Series',
+    authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+    creator: 'Flimify Tv',
+    publisher: 'Flimify Tv',
     openGraph: {
         title: 'TV Series - Discover and Watch the Latest TV Shows | Flimify',
         description: 'Explore our collection of TV series, including the latest releases and classic favorites. Find detailed information, watch episodes, and stay updated with the newest TV shows on Flimify.',
@@ -27,6 +28,18 @@ export const metadata = {
     robots: {
         index: true,
         follow: true,
+        nocache: false,
+        googleBot: {
+            index: true,
+            follow: true,
+            noimageindex: false,
+            'max-snippet': -1,
+            'max-image-preview': 'large',
+            'max-video-preview': -1,
+        },
+    },
+    alternates: {
+        canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/tv-series`,
     },
     additionalMetaTags: [
         {
@@ -37,8 +50,23 @@ export const metadata = {
             name: 'viewport',
             content: 'width=device-width, initial-scale=1',
         },
+        {
+            name: 'theme-color',
+            content: '#1a191f',
+        },
     ],
+    icons: {
+        icon: '/favicon.ico',
+        appleTouchIcon: '/favicon.ico',
+    },
+    potentialAction: {
+        '@type': 'SearchAction',
+        target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+    },
+    // manifest: '/site.webmanifest',
 };
+
 
 export async function fetchMovies(query){
     function setIsLoading(){}
@@ -46,52 +74,14 @@ export async function fetchMovies(query){
     return res?.data
 }
 
+
+export const revalidate = 0
+
 export default async function page(){
     const movieData = await fetchMovies('tv-Series')
-    const pageTitle = 'Tv-Series - Watch Online';
-    const pageDescription = 'Explore the latest and most popular TV series on Flimify. Watch your favorite shows online from a variety of genres.';
-    const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/tv-series`; 
-    const pageImage = `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`;
 
-    const structuredData = {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "name": "Tv-Series",
-        "description": pageDescription,
-        "url": pageUrl,
-        "image": pageImage,
-        "mainEntity": dummyMovies.map(movie => ({
-            "@type": "Movie",
-            "name": movie.title,
-            "url": `${pageUrl}`,
-            "image": movie?.image,
-            "genre": movie?.genre,
-            "description": movie?.description,
-        }))
-    };
   return (
     <>
-        <Head>
-            <title>{pageTitle}</title>
-            <meta name="description" content={pageDescription} />
-            <meta name="keywords" content="TV Series, Watch Online, Popular TV Shows, Latest TV Series, Flimify, Free Movies, " />
-            <meta name="robots" content="index, follow" />
-            <link rel="canonical" href={pageUrl} />
-            <meta property="og:title" content={pageTitle} />
-            <meta property="og:description" content={pageDescription} />
-            <meta property="og:image" content={pageImage} />
-            <meta property="og:url" content={pageUrl} />
-            <meta property="og:type" content="website" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:title" content={pageTitle} />
-            <meta name="twitter:description" content={pageDescription} />
-            <meta name="twitter:image" content={pageImage} />
-            <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-            />
-        </Head>
-
         <Container>
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>

@@ -7,6 +7,76 @@ import { FaFacebookF, FaTiktok, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { TbBrandYoutube } from "react-icons/tb";
 
+export const metadata = {
+  title: {
+    default: 'Contact Us - Flimify | Get in Touch with Us',
+    template: '%s | Flimify',
+  },
+  description:
+    'Get in touch with Flimify! Whether you have questions, feedback, or inquiries, we are here to assist. Reach out to our team for any movie-related inquiries or support.',
+  keywords:
+    'Contact Flimify, Customer Support, Movie Platform Inquiries, Feedback, Get in Touch, Movie Platform Support, Streaming Support',
+  authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+  creator: 'Flimify Tv',
+  publisher: 'Flimify Tv',
+  openGraph: {
+    title: 'Contact Us - Flimify | Get in Touch with Us',
+    description:
+      'Need help or have feedback? Contact Flimify today for assistance with any movie-related queries, support, or partnership inquiries.',
+    url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/contact`,
+    image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+    type: 'website',
+    siteName: 'Flimify',
+    locale: 'en_US',
+  },
+  alternates: {
+    canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/contact`,
+},
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Contact Us - Flimify | Get in Touch with Us',
+    description:
+      'Contact Flimify for assistance or inquiries. We are here to help with any movie or platform-related support you need.',
+    image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-snippet': -1,
+      'max-image-preview': 'large',
+      'max-video-preview': -1,
+    },
+  },
+  additionalMetaTags: [
+    {
+      name: 'author',
+      content: 'Flimify',
+    },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1',
+    },
+    {
+      name: 'theme-color',
+      content: '#1a191f',
+    },
+  ],
+  icons: {
+    icon: '/favicon.ico',
+    appleTouchIcon: '/favicon.ico',
+  },
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+  // manifest: '/site.webmanifest',
+};
 
 
 const page = () => {

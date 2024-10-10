@@ -9,6 +9,74 @@ import doodstream from '@images/doodstream.png'
 import upstream from '@images/upstream.png'
 import Image from 'next/image';
 
+export const metadata = {
+    title: {
+      default: 'About Us - Flimify | Your Home for Global Cinema',
+      template: '%s | Flimify',
+    },
+    description:
+      'Learn more about Flimify, a platform dedicated to bringing you the best movies from Hollywood, Bollywood, K-Drama, African cinema, and beyond. Discover our mission to connect movie enthusiasts worldwide through an immersive film experience.',
+    keywords:
+      'About Flimify, Movie Platform, Global Cinema, Hollywood, Bollywood, K-Drama, African Movies, International Movies, Streaming, Movie Community',
+    authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+    creator: 'Flimify Tv',
+    publisher: 'Flimify Tv',
+    openGraph: {
+        title: 'About Us - Flimify | Your Home for Global Cinema',
+        description:
+            'At Flimify, we are passionate about bringing diverse cinematic experiences to viewers worldwide. Learn more about our journey, values, and commitment to movie lovers around the globe.',
+        url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/about`,
+        image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+        type: 'website',
+        siteName: 'Flimify',
+        locale: 'en_US',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'About Us - Flimify | Your Home for Global Cinema',
+        description:
+            'Flimify is a global movie streaming platform connecting audiences with films from various cultures. Get to know our story and vision.',
+        image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
+    },
+    robots: {
+        index: true,
+        follow: true,
+        nocache: false,
+        googleBot: {
+            index: true,
+            follow: true,
+            noimageindex: false,
+            'max-snippet': -1,
+            'max-image-preview': 'large',
+            'max-video-preview': -1,
+        },
+    },
+    additionalMetaTags: [
+      {
+        name: 'author',
+        content: 'Flimify',
+      },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1',
+      },
+      {
+        name: 'theme-color',
+        content: '#1a191f',
+      },
+    ],
+    icons: {
+      icon: '/favicon.ico',
+      appleTouchIcon: '/favicon.ico',
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+    // manifest: '/site.webmanifest',
+};
+
 
 const page = () => {
   return (

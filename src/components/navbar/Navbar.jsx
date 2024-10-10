@@ -1,14 +1,14 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import {usePathname, useRouter, useSearchParams} from 'next/navigation'
+import {usePathname, useRouter} from 'next/navigation'
 import Link from 'next/link'
 import { IoMdArrowDropdown } from "react-icons/io";
 import Input from '../ui/Input';
 import { BiSearch } from "react-icons/bi";
 import Button from '../ui/Button';
 import { FaRegUser } from "react-icons/fa";
-import { IoMenu, IoClose, IoSettingsOutline } from "react-icons/io5";
+import { IoMenu, IoClose, } from "react-icons/io5";
 import { RiAccountPinBoxLine } from "react-icons/ri";
 import { GoBookmark } from "react-icons/go";
 import { useDispatch, useSelector } from 'react-redux';
@@ -68,7 +68,6 @@ const Navbar = () => {
   const {push} = useRouter()
   const dispatch = useDispatch()
   const [mounted, setMounted] = useState(false);
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     setMounted(true);

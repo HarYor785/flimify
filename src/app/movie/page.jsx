@@ -4,28 +4,31 @@ import React from 'react';
 import Category from '@/components/category/Category';
 import { handleFetch } from '@/lib/data';
 
+
 export const metadata = {
-    title: 'Bollywood Movies - Discover and Watch Popular Indian Films | Flimify',
+    title: 'International Movies - Discover and Watch Top Hollywood Films | Flimify',
     description:
-      'Explore our collection of Bollywood movies, featuring popular Indian films, new releases, and classic hits. Find detailed information, watch trailers, and enjoy the best of Indian cinema on Flimify.',
+      'Dive into our extensive collection of top Hollywood movies, featuring blockbusters and critically acclaimed films. Discover detailed information, watch trailers, and immerse yourself in the best of international cinema on Flimify.',
     keywords:
-      'Bollywood Movies, Indian Films, Popular Bollywood Movies, Watch Bollywood Movies, Bollywood Cinema, Latest Bollywood Releases',
+      'Hollywood Movies, Top Hollywood Films, Watch Hollywood Movies, International Cinema, Latest Hollywood Films, Blockbuster Movies, Film Recommendations, Movie Trailers',
     authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
     creator: 'Flimify Tv',
     publisher: 'Flimify Tv',
     openGraph: {
-      title: 'Bollywood Movies - Discover and Watch Popular Indian Films | Flimify',
+      title: 'International Movies - Discover and Watch Top Hollywood Films | Flimify',
       description:
-        'Explore our collection of Bollywood movies, featuring popular Indian films, new releases, and classic hits. Find detailed information, watch trailers, and enjoy the best of Indian cinema on Flimify.',
-      url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/bollywood`,
+        'Explore our extensive collection of top Hollywood movies, including blockbusters and critically acclaimed films. Find detailed information, watch trailers, and enjoy the best international cinema on Flimify.',
+      url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/international`,
       image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`,
       type: 'website',
+      siteName: 'Flimify',
+      locale: 'en_US',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Bollywood Movies - Discover and Watch Popular Indian Films | Flimify',
+      title: 'International Movies - Discover and Watch Top Hollywood Films | Flimify',
       description:
-        'Explore our collection of Bollywood movies, featuring popular Indian films, new releases, and classic hits. Find detailed information, watch trailers, and enjoy the best of Indian cinema on Flimify.',
+        'Explore our extensive collection of top Hollywood movies, including blockbusters and critically acclaimed films. Discover detailed information, watch trailers, and enjoy the best of international cinema on Flimify.',
       image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`,
     },
     robots: {
@@ -42,7 +45,7 @@ export const metadata = {
       },
     },
     alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/bollywood`,
+      canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/international`,
     },
     additionalMetaTags: [
       {
@@ -70,25 +73,26 @@ export const metadata = {
     // manifest: '/site.webmanifest',
   };
   
+  
 
 export async function fetchMovies(query){
     function setIsLoading(){}
     const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
     return res?.data
-  }
+}
 
 export const revalidate = 0
 
 export default async function page() {
-    const movieData = await fetchMovies('bollywood')
+    const movieData = await fetchMovies('hollywood')
 
   return (
     <>
-    
+        
         <Container>
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
-                    <Heading page={'Bollywood'} />
+                    <Heading page={'International'} />
                     <Category data={movieData} />
                 </div>
             </section>

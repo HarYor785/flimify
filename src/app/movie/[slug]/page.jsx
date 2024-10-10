@@ -21,8 +21,11 @@ export async function generateMetadata({ params }){
       default: `${movie?.title} - Flimify`,
       template: '%s | Flimify',
     },
-    description: `Watch ${movie?.title} online and enjoy seamless streaming of movies from Hollywood, Bollywood, K-Drama, African cinema, and more on Flimify.`,
+    description: `${movie?.overview}`,
     keywords: `${movie?.genre}, Watch ${movie?.title}, ${movie?.casts}, Movies, Hollywood, Bollywood, K-Drama, African Movies`,
+    authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+    creator: 'Flimify Tv',
+    publisher: 'Flimify Tv',
     openGraph: {
       title: `${movie?.title} - Flimify`,
       description: `Stream ${movie?.title} in ${movie?.genre} on Flimify. Enjoy high-quality streaming from various genres, including Hollywood, Bollywood, and more.`,
@@ -35,11 +38,20 @@ export async function generateMetadata({ params }){
       card: 'summary_large_image',
       title: `${movie?.title} - Flimify`,
       description: `Watch ${movie?.title} online on Flimify, your ultimate movie destination.`,
-      image: `${movie.posterImage}`, 
+      image: `${movie?.posterImage}`, 
     },
     robots: {
       index: true,
       follow: true,
+      nocache: false,
+      googleBot: {
+        index: true,
+        follow: true,
+        noimageindex: false,
+        'max-snippet': -1,
+        'max-image-preview': 'large',
+        'max-video-preview': -1,
+      },
     },
     additionalMetaTags: [
       {
@@ -57,12 +69,18 @@ export async function generateMetadata({ params }){
     ],
     icons: {
       icon: '/favicon.ico',
-      appleTouchIcon: '/apple-touch-icon.png',
+      appleTouchIcon: '/favicon.ico',
     },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?search_query={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+    // manifest: '/site.webmanifest',
   };
 };
 
-
+export const revalidate = 0
 export default async function page({params: {slug}}){
   const data = await fetchWatchMovies(slug)
   const moreMovies = await fetchMovies(data?.category?.toLowerCase())

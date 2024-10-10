@@ -23,7 +23,7 @@ const ProfileCard = () => {
         className='border border-primary rounded-md'/>
         <div className='flex flex-col items-start'>
             <h3 className='md:text-sm text-xs text-secondaryText'>
-                {user?.firstName + ' ' + user.lastName}
+                {user?.firstName + ' ' + user?.lastName}
             </h3>
             <span className='text-xs text-primaryText italic'>
                 {user?.code}

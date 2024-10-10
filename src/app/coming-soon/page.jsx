@@ -26,7 +26,7 @@ export const metadata = {
         title: "Coming Soon Movies | Upcoming Releases & Trailers",
         description:
             "Stay in the loop with the latest movies coming soon to theaters. Watch trailers, read plot details, and find out which films are set to hit the big screen next.",
-        url: "https://flimify.com/coming-soon",
+        url: "${process.env.NEXT_PUBLIC_CLIENT_URL}/coming-soon",
         type: "website",
         image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
     },
@@ -38,10 +38,10 @@ export const metadata = {
             image: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/logo.png`, 
     },
     alternates: {
-        canonical: "https://flimify.com/coming-soon",
+        canonical: `${process.env.NEXT_PUBLIC_CLIENT_URL}/coming-soon`,
     },
-  };
-  
+};
+
 
 export const revalidate = 0
 export default async function page (){

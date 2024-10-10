@@ -9,9 +9,9 @@ export async function fetchMovies(query){
     function setIsLoading(){}
     const res = await handleFetch(`/movies?query=${query}`,'POST','','',setIsLoading)
     return res?.data
-  }
+}
 
-export async function generateMetadata({ params, searchParams }) {
+  export async function generateMetadata({ params, searchParams }) {
     const query = searchParams.search_query;
     const pageUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/search?q=${query}`;
 
@@ -19,6 +19,9 @@ export async function generateMetadata({ params, searchParams }) {
         title: `${query ? `${query} - Search Results` : 'Search'} | Flimify`,
         description: `Find movies and TV shows related to "${query}" on Flimify. Search through our diverse collection including Hollywood, Bollywood, K-Drama, and more.`,
         keywords: `Search, ${query}, Movies, Hollywood, Bollywood, K-Drama, Movie Search, Search Results`,
+        authors: [{ name: 'Flimify Tv', url: `${process.env.NEXT_PUBLIC_CLIENT_URL}` }],
+        creator: 'Flimify Tv',
+        publisher: 'Flimify Tv',
         openGraph: {
             title: `${query ? `${query} - Search Results` : 'Search'} | Flimify`,
             description: `Discover movies and TV shows related to "${query}" on Flimify. Explore a vast library including Hollywood, Bollywood, K-Drama, and more.`,
@@ -36,19 +39,31 @@ export async function generateMetadata({ params, searchParams }) {
         robots: {
             index: true,
             follow: true,
+            nocache: false,
+            googleBot: {
+                index: true,
+                follow: true,
+                noimageindex: false,
+                'max-snippet': -1,
+                'max-image-preview': 'large',
+                'max-video-preview': -1,
+            },
+        },
+        alternates: {
+            canonical: pageUrl,
         },
         additionalMetaTags: [
             {
-            name: 'author',
-            content: 'Flimify',
+                name: 'author',
+                content: 'Flimify',
             },
             {
-            name: 'viewport',
-            content: 'width=device-width, initial-scale=1',
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1',
             },
             {
-            name: 'theme-color',
-            content: '#1a191f',
+                name: 'theme-color',
+                content: '#1a191f',
             },
         ],
         icons: {
@@ -62,6 +77,8 @@ export async function generateMetadata({ params, searchParams }) {
         },
     };
 }
+
+export const revalidate = 0
 
 export default async function page({ params, searchParams }){
     const data = await fetchMovies(searchParams.search_query?.toLowerCase())

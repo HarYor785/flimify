@@ -22,7 +22,7 @@ import { LuLoader } from "react-icons/lu";
 
 
 
-const Posts = ()=> {
+const Posts = ({moviePosts, fetchPosts})=> {
     const [value, setValue] = useState('')
     const {user} = useSelector((state)=>state.user)
     const {post} = useSelector((state)=>state.post)
@@ -75,14 +75,13 @@ const Posts = ()=> {
         setPreviewUrls(updatedPreviewUrls);
     };
 
-    const fetchPosts = async ()=>{
-        const res = await handleFetch(`/post`,'GET','','',setIsLoading)
-        dispatch(handleAddPost(res?.data))
-    }
-
+    // const fetchPosts = async ()=>{
+    //     const res = await handleFetch(`/post`,'GET','','',setIsLoading)
+    // }
+    
     useEffect(()=>{
-        fetchPosts()
-    },[])
+        dispatch(handleAddPost(moviePosts))
+    },[moviePosts])
 
     const handleCreatePost = async ()=>{
         if(value.length >= 3){

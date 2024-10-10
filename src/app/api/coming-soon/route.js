@@ -24,11 +24,11 @@ export async function GET() {
             allMovies.push(...data.results);
             currentPage++;
         }
-console.log(allMovies)
         return new Response(JSON.stringify(allMovies), {
             status: 200,
             headers: {
                 'Content-Type': 'application/json',
+                'Cache-Control': 'no-store'
             },
         });
     } catch (error) {
@@ -39,6 +39,7 @@ console.log(allMovies)
                 status: 500,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Cache-Control': 'no-store'
                 },
             }
         );
