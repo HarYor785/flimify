@@ -24,8 +24,9 @@ const VideoPlayer = ({ playerRef, videoSrc }) => {
         }
     }, [videoSrc]);
 
-    return <div ref={playerRef} className="video-player"
-    style={{ width: '100%', height: '400px' }} />;
+    return <video ref={playerRef} className="video-player"
+    style={{ width: '100%', height: '400px' }}></video>;
+    
 };
 
 export default VideoPlayer;
