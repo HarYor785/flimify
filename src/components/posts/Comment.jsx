@@ -15,12 +15,13 @@ import { LuLoader } from "react-icons/lu";
 const Comment = ({openComment, comments, id, 
     user, handleFetchComment, loadingComment}) => {
     const [value, setValue] = useState('')
-    const [replyValue, setReplyValue] = useState('')
+    const [replyValues, setReplyValues] = useState({});
     const [isLoading, setIsLoading] = useState(false)
     const [openReply, setOpenReply] = useState('')
     const [isPendingLike, setIsPendingLike] = useState(false)
     const [isPendingDel, setIsPendingDel] = useState(false)
     const [openMenu, setOpenMenu] = useState()
+    const [isLoadingReply, setIsLoadingReply] = useState(false)
 
     const handleOpenCommentMenu = (val)=>{
         if(openMenu === val){
@@ -37,6 +38,10 @@ const Comment = ({openComment, comments, id,
             setOpenReply(id)
         }
     }
+
+    const handleReplyValueChange = (commentId, value) => {
+        setReplyValues(prev => ({ ...prev, [commentId]: value }));
+    };
 
     useEffect(()=>{
         handleFetchComment(id)
@@ -64,11 +69,12 @@ const Comment = ({openComment, comments, id,
             toast.error('You must be logged in to reply')
             return
         }
-        if(replyValue.length >= 2){
-            const data = {postId: id, commentId: commentId, reply: replyValue}
-            const res = await handleFetch(`/post/reply`,'POST',user?.token,data,setIsLoading)
+        const reply = replyValues[commentId];
+        if(reply.length >= 2){
+            const data = {postId: id, commentId: commentId, reply: reply}
+            const res = await handleFetch(`/post/reply`,'POST',user?.token,data,setIsLoadingReply)
             if(res?.success){
-                setReplyValue('')
+                setReplyValues('')
                 handleFetchComment(id)
             }else{
                 toast.error(res?.message)
@@ -193,12 +199,13 @@ const Comment = ({openComment, comments, id,
                                     width={40} height={40} 
                                     className="rounded-full object-cover border-2 border-main"/>
                                     <Input type="text" placeHolder="Reply this comment"
-                                    value={replyValue} onChange={(e)=>setReplyValue(e.target.value)}/>
+                                    value={replyValues[item._id] || ''} 
+                                    onChange={(e)=>handleReplyValueChange(item._id, e.target.value)} />
                                 </div>
                                 <button onClick={()=>handleReply(id, item?._id)}
-                                disabled={isLoading}
+                                disabled={isLoadingReply}
                                 className='p-3 rounded-full border-2 border-main text-main'>
-                                    {isLoading ? <LuLoader size={16} className="animate-spin-slow"/>
+                                    {isLoadingReply ? <LuLoader size={16} className="animate-spin-slow"/>
                                     :<BsSend size={16} />}
                                 </button>
                             </div>

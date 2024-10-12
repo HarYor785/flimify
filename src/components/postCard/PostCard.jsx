@@ -11,10 +11,7 @@ import { handleFetch } from '@/lib/data';
 import { IoMdCheckmark } from "react-icons/io";
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import dynamic from 'next/dynamic';
-
-
-const DynamicVideoPlayer = dynamic(() => import('../videoplayer/VideoPlayer'), { ssr: false });
+import VideoPlayer from '../videoplayer/VideoPlayer';
 
 
 function srcset(image, size, rows = 1, cols = 1) {
@@ -117,15 +114,28 @@ const PostCard = ({item, user, fetchPosts}) => {
         rows: 1,
     }));
 
-    const videoItems = item?.image?.filter(img => 
-        img?.includes('video')
-    );
-    
     const imageItems = itemData?.filter(data => 
         !data?.img?.includes('video')
     );
 
+    const videoItems = item?.image?.filter(img => 
+        img?.includes('video')
+    );
 
+    const videoJsOptions = {
+        autoplay: true,
+        controls: true,
+        responsive: true,
+        fluid: true,
+        sources: [{
+            src: videoItems[0],
+            type: 'video/mp4'
+        }]
+    };
+
+    const handlePlayerReady = (player) => {
+        playerRef.current = player;
+    };
 
     return (
     <div className='w-full flex flex-col gap-3 p-4 border 
@@ -198,7 +208,7 @@ const PostCard = ({item, user, fetchPosts}) => {
         }
         {
             videoItems?.length > 0 &&
-            <DynamicVideoPlayer playerRef={playerRef} videoSrc={videoItems[0]}/>
+            <VideoPlayer options={videoJsOptions} onReady={handlePlayerReady}/>
         }
 
         {

@@ -1,32 +1,50 @@
-import { useEffect, useRef } from 'react';
-import cloudinary from 'cloudinary-video-player/all';
-import 'cloudinary-video-player/cld-video-player.min.css';
-import "cloudinary-video-player/cld-video-player.min.css";
-import 'cloudinary-video-player/chapters';
-import 'cloudinary-video-player/playlist';
+import React from 'react';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 
 
-const VideoPlayer = ({ playerRef, videoSrc }) => {
-    const cloudinaryRef = useRef();
+const VideoPlayer = (props) => {
+    const videoRef = React.useRef(null);
+    const playerRef = React.useRef(null);
+    const {options, onReady} = props;
 
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            if (!cloudinaryRef.current) {
-                cloudinaryRef.current = cloudinary;
-            }
+    React.useEffect(() => {
 
-            const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
-                cloud_name: 'dgnb2e0te',
-                secure: true,
-                controls: true,
+        if (!playerRef.current) {
+            const videoElement = document.createElement("video-js");
+
+            videoElement.classList.add('vjs-big-play-centered');
+            videoRef.current.appendChild(videoElement);
+
+            const player = playerRef.current = videojs(videoElement, options, () => {
+                videojs.log('player is ready');
+                onReady && onReady(player);
             });
-            player.source(videoSrc);
-        }
-    }, [videoSrc]);
 
-    return <video ref={playerRef}  id={'doc-player'}
-    style={{ width: '100%', height: '400px' }}></video>;
-    
-};
+        } else {
+            const player = playerRef.current;
+
+            player.autoplay(options.autoplay);
+            player.src(options.sources);
+        }
+    }, [options, videoRef]);
+
+    React.useEffect(() => {
+        const player = playerRef.current;
+
+        return () => {
+            if (player && !player.isDisposed()) {
+                player.dispose();
+                playerRef.current = null;
+            }
+        };
+    }, [playerRef]);
+
+    return (
+        <div data-vjs-player>
+            <div ref={videoRef} />
+        </div>
+    );
+}
 
 export default VideoPlayer;

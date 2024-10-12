@@ -21,7 +21,7 @@ import Loader from '../loader/Loader';
 
 
 
-const Posts = ()=> {
+const Posts = ({ads})=> {
     const [value, setValue] = useState('')
     const {user} = useSelector((state)=>state.user)
     const {post} = useSelector((state)=>state.post)
@@ -122,6 +122,8 @@ const Posts = ()=> {
         }
     }
     
+    const bannerr1 = ads?.filter((item)=>item?.size === '728x90')
+    const bannerr2 = ads?.filter((item)=>item?.size === '300x250')
 
     return (
         <div className="w-full gap-6 relative md:grid md:grid-cols-3 
@@ -208,29 +210,54 @@ const Posts = ()=> {
                 </div>
             </div>
             {/* RIGHT */}
-            <div className='md:col-span-1 md:sticky md:top-4 md:right-0 md:h-1/3 
+            <div className='md:col-span-1 md:sticky md:top-4 md:right-0 h-1/3 
             w-full flex flex-col items-center gap-5 border border-primary p-3 rounded-lg '>
-                <a href="https://doodstream.com/join/54lfhgm1uoes"
-                target='_blank'>
-                    <Image 
-                    style={{width:"100%",height: "auto", maxWidth: "720px"}} 
-                    src="https://i.doodcdn.com/img/728x90.gif" 
-                    alt="DoodStream - Upload videos share & make money"
-                    width={200} height={200}/>
-                </a>
-                <div className='w-full h-[300px] bg-primary rounded-md flex items-center 
-                justify-center'>
-                    <span className="text-lg text-white text-center">
-                        Advertise banner <br/>
-                        350 x 280
-                    </span>
-                </div>
-                <div className='w-full h-[300px] bg-primary rounded-md flex items-center 
-                justify-center'>
-                    <span className="text-lg text-white text-center">
-                        Advertise banner <br/>
-                        350 x 280
-                    </span>
+                {
+                    bannerr1 && 
+                    <a href={bannerr1[0]?.targetUrl}
+                    target='_blank'>
+                        <Image 
+                        style={{width:"100%",height: "auto", maxWidth: "720px"}} 
+                        src={bannerr1[0]?.content} 
+                        alt={bannerr1[0]?.title}
+                        width={200} height={200}/>
+                    </a>
+                }
+                <div className='w-full flex flex-col gap-4'>
+                    {
+                        bannerr2?.slice(0, 2)?.map((item, i)=>(
+                            <div key={i}
+                            className='w-full min-h-[300px] max-h-[300px] bg-primary 
+                            rounded-md flex items-center justify-center'>
+                                <a href={item?.targetUrl}
+                                target='_blank' className='w-full h-full'>
+                                    {
+                                        item?.type === 'image' ? (
+                                            <Image 
+                                            className='w-full h-full object-contain'
+                                            style={{width:"100%",height: "auto", maxWidth: "720px"}} 
+                                            src={item?.content} 
+                                            alt={item?.title}
+                                            width={1000} height={1000}/>
+                                        ):(
+                                            <iframe src={item?.content} 
+                                            className='w-full h-full'/>
+                                        )
+                                    }
+                                </a>
+                            </div>
+                        ))
+                    }
+                    {
+                        bannerr2?.length < 2 &&
+                        <div className='w-full h-[300px] max-h-[300px] bg-primary 
+                        rounded-md flex items-center justify-center mt-6'>
+                            <span className="text-lg text-white text-center">
+                                Advertise banner <br/>
+                                350 x 280
+                            </span>
+                        </div>
+                    }
                 </div>
                 
             </div>

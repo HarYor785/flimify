@@ -102,12 +102,20 @@ export async function fetchMovies(query){
   return res?.data
 }
 
+export async function fetchCampaign(page){
+  function setIsLoading(){}
+  const res = await handleFetch(`/campaign?page=${page}`,'GET','','',setIsLoading)
+  return res?.data
+}
+
 export const revalidate = 0
 export default async function Home() {
   const data = await fetchComingSoon()
+  const ads = await fetchCampaign('homepage')
   const movieData = await fetchMovies('all')
   const latestMovies = getLatestMoviesByCategory(movieData)
 
+  const bannerr1 = ads?.filter((item)=>item?.size === '728x90')
   const hollywoodMovie  = movieData?.filter((item)=>item?.category === 'Hollywood')
   const bollywoodMovie  = movieData?.filter((item)=>item?.category === 'Bollywood')
   const animationMovie  = movieData?.filter((item)=>item?.category === 'Animation')
@@ -138,14 +146,17 @@ export default async function Home() {
     <Container>
         <main className="w-full md:py-20 py-3 flex flex-col">
           <PageBg image={viewBg}/>
-            <a href="https://doodstream.com/join/54lfhgm1uoes"
-            target='_blank' className="self-center md:!-mt-14 mb-3">
-                <Image 
-                style={{width:"100%",height: "auto",}} 
-                src="https://i.doodcdn.com/img/728x90.gif" 
-                alt="DoodStream - Upload videos share & make money"
-                width={200} height={200}/>
+          {
+            bannerr1?.length > 0 && 
+            <a href={bannerr1[0]?.targetUrl}
+              target='_blank'>
+                  <Image 
+                  style={{width:"100%",height: "auto", maxWidth: "720px"}} 
+                  src={bannerr1[0]?.content} 
+                  alt={bannerr1[0]?.title}
+                  width={200} height={200}/>
             </a>
+          }
             <div className="w-full flex flex-col items-start gap-10">
               <h1 className="md:text-3xl text-xl font-bold text-secondaryText uppercase">
                 <span className="text-main">New</span> Trending Movies

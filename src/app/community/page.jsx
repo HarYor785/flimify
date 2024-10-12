@@ -1,5 +1,6 @@
 import Container from '@/components/container/Container'
 import Posts from '@/components/posts/Posts'
+import { handleFetch } from '@/lib/data';
 import React from 'react'
 
 
@@ -69,15 +70,23 @@ export const metadata = {
       'query-input': 'required name=search_term_string',
     },
     // manifest: '/site.webmanifest',
-  };
+};
 
-const page = ()=>{
+export async function fetchCampaign(page){
+  function setIsLoading(){}
+  const res = await handleFetch(`/campaign?page=${page}`,'GET','','',setIsLoading)
+  return res?.data
+}
+
+export const revalidate = 0
+export default async function page(){
+  const data = await fetchCampaign('community')
     return (
     <>
         <Container>
             <section className='w-full flex flex-col gap-4'>
                 <div className='w-full py-4 relative'>
-                    <Posts/>
+                    <Posts ads={data}/>
                 </div>
             </section>
         </Container>
@@ -85,4 +94,3 @@ const page = ()=>{
   )
 }
 
-export default page
