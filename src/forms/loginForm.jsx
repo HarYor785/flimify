@@ -52,6 +52,7 @@ const LoginForm = () => {
         <div className='w-full relative flex flex-col gap-3'>
             <Input type={'email'} label={'Email'}
             name="email"
+            placeHolder="email@example.com"
             {...register('email',{
                 required: 'Email is required!'
             })}
@@ -62,6 +63,7 @@ const LoginForm = () => {
             </Input>
             <Input type={open ? 'text' : 'password'} label={'Password'}
             name="password"
+            placeHolder="***************"
             {...register('password',{
                 required: 'Password is required!'
             })}

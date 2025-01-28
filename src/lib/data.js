@@ -30,7 +30,7 @@ export const handleFetch = async (url, method, token, body, setIsLoading) => {
         const data = await response.json();
         if (data?.message?.includes('Authorization failed')) {
             localStorage.removeItem('flimify')
-            toast.info('Kindly login to create a post')
+            toast.info('Session expired')
             return
         }
 
@@ -40,7 +40,9 @@ export const handleFetch = async (url, method, token, body, setIsLoading) => {
         console.log('Error in handleFetch:', error);
         return []; 
     }finally{
-        setIsLoading(false)
+        if(setIsLoading){
+            setIsLoading(false)
+        }
     }
 };
 
@@ -56,17 +58,16 @@ export const fetchWatchMovies = async (slug) =>{
     return res?.data
 }
 
-export const fetchComingSoon = async () => {
+export const fetchComingSoon = async (page = 1) => {
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/coming-soon`,{
+        const res = await fetch(`${process.env.NEXT_PUBLIC_CLIENT_URL}/api/coming-soon?page=${page}`,{
             method: 'GET',
         })
         const data = await res.json()
-        const filterData = data?.filter((d)=>{
+        const filterData = data?.results?.filter((d)=>{
             return moment(d?.release_date).isAfter(moment())
         })
-        console.log(filterData)
-        return data
+        return data?.results
     } catch (error) {
         console.log(error)
         return []

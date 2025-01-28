@@ -1,16 +1,22 @@
 import Link from 'next/link'
 import React from 'react'
 
-const DownloadBtn = ({title, href}) => {
+const DownloadBtn = ({href}) => {
   return (
-    <Link href={href || '#'} 
-    target='_blank'
-    className="Btn">
-      <span class="tooltip">{title}</span>
-      <svg class="svgIcon" viewBox="0 0 384 512" height="1em" 
-      xmlns="http://www.w3.org/2000/svg"><path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path></svg>
-      <span class="icon2"></span>
-    </Link>
+
+    <div className="tooltip-container">
+      <a href={href || '#'} 
+      download className="button-content">
+        <span className="text">Download</span>
+        <svg 
+        className="share-icon"
+        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="20px" width="20px">
+        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+        <g id="SVGRepo_iconCarrier"> <g id="Interface / Download"> 
+        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2" stroke="#f1f1f1" d="M6 21H18M12 3V17M12 17L17 12M12 17L7 12" id="Vector"></path> </g> </g></svg>
+      </a>
+    </div>
   )
 }
 

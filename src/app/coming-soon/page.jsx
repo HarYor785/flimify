@@ -55,17 +55,17 @@ export default async function page (){
                     {
                         data?.slice(0, 18)?.map((item,i)=>(
                             <div key={i} className="flex flex-col gap-3 items-start">
-                            <Image src={`https://image.tmdb.org/t/p/w200${item?.poster_path}`}
-                            width={200} height={200} alt={item?.original_title}
-                            className="rounded-md w-full h-full object-contain"/>
-                            <div className="flex flex-col items-start gap-1">
-                                <h1 className="text-sm text-secondaryText">
-                                {item?.original_title}
-                                </h1>
-                                <span className="text-xs text-main">
-                                {moment(item?.release_date).format('DD MMM YYYY')}
-                                </span>
-                            </div>
+                                <Image src={`https://image.tmdb.org/t/p/w200${item?.poster_path}`}
+                                width={200} height={200} alt={item?.original_title}
+                                className="rounded-md w-full h-full object-contain"/>
+                                <div className="flex flex-col items-start gap-1">
+                                    <h1 className="text-sm text-secondaryText">
+                                    {item?.original_title}
+                                    </h1>
+                                    <span className="text-xs text-main">
+                                    {moment(item?.release_date).format('DD MMM YYYY')}
+                                    </span>
+                                </div>
                             </div>
                         ))
                     }

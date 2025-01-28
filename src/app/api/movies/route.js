@@ -3,8 +3,10 @@
 export async function GET(req){
     const {searchParams} = new URL(req.url)
     const params = searchParams.get('query')
+    const page = searchParams.get('page')
+    const limit = searchParams.get('limit')
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/movie/category?query=${params}`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/movie/category?query=${params}&page=${page}&limit=${limit}`,{
             method: 'GET',
             headers:{
                 'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ export async function GET(req){
     const {searchParams} = new URL(req.url)
     const params = searchParams.get('slug')
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/movie/watch?slug=${params}`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/movie/watch?id=${params}`,{
             method: 'GET',
             headers:{
                 'Content-Type': 'application/json',

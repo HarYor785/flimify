@@ -174,7 +174,7 @@ const Navbar = () => {
                   <NavLink href="/tv-series" title="Tv-Series"/>
                 </li>
                 <li>
-                  <NavLink href="/k-drama" title="K-Drama"/>
+                  <NavLink href="/tv-series" title="K-Drama"/>
                 </li>
                 <li>
                   <NavLink href="/community" title="Community"/>

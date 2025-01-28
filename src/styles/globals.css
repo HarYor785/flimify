@@ -36,10 +36,9 @@
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge, and Firefox */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
 
 @font-face {
@@ -67,7 +66,11 @@
   }
 }
 
-/* From Uiverse.io by Mohammad-Rahme-576 */ 
+.swiper-button-lock{
+  display: block !important;
+}
+
+
 /* Container Styles */
 .tooltip-container {
   position: relative;
@@ -83,7 +86,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #f0af14, #f7c040);
   color: white;
-  padding: 14px 28px;
+  padding: 10px 20px;
   border-radius: 50px;
   cursor: pointer;
   transition:
@@ -149,7 +152,7 @@
 }
 
 .text {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin-right: 12px;
   white-space: nowrap;
@@ -245,6 +248,12 @@
 }
 
 /* Responsive Design */
+@media (max-width: 998px) {
+  .player_container{
+    flex-direction: column !important;
+  }
+}
+
 @media (max-width: 768px) {
   .button-content {
     padding: 12px 24px;

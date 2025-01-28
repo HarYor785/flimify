@@ -88,9 +88,9 @@ const page = () => {
     ]
   return (
     <Container>
-         <section className='py-10'>
+        <section className='py-10'>
             <div className='w-full flex flex-col gap-10'>
-                <Heading page={'Profile'} />
+                <Heading page={'Profile'} profile={true}/>
                 <div className='w-full flex flex-col gap-3'>
                     <div className='w-full flex items-start justify-between 
                     pb-3 border-b border-primary'>

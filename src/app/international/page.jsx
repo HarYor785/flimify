@@ -75,9 +75,9 @@ export const metadata = {
   
   
 
-export async function fetchMovies(query){
+export async function fetchMovies(query, page = 1, limit = 30){
     function setIsLoading(){}
-    const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+    const res = await handleFetch(`/movies?query=${query}&page=${page}&limit=${limit}`,'GET','','',setIsLoading)
     return res?.data
 }
 
@@ -92,7 +92,7 @@ export default async function page() {
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'International'} />
-                    <Category data={movieData} />
+                    <Category data={movieData} query={'hollywood'}/>
                 </div>
             </section>
         </Container>

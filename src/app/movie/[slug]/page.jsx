@@ -4,9 +4,9 @@ import { fetchWatchMovies, handleFetch } from '@/lib/data'
 import React from 'react'
 
 
-export async function fetchMovies(query){
+export async function fetchMovies(query, page = 1, limit = 20){
   function setIsLoading(){}
-  const res = await handleFetch(`/movies?query=${query}`,'GET','','',setIsLoading)
+  const res = await handleFetch(`/movies?query=${query}&page=${page}&limit=${limit}`,'GET','','',setIsLoading)
   return res?.data
 }
 
@@ -81,13 +81,18 @@ export async function generateMetadata({ params }){
 };
 
 export const revalidate = 0
-export default async function page({params: {slug}}){
-  const data = await fetchWatchMovies(slug)
-  const moreMovies = await fetchMovies(data?.category?.toLowerCase())
-  const filterMovie = moreMovies?.filter((item)=>item?._id !== data?._id)
+export default async function page({params: {slug}, searchParams: {d}}){
+  const data = await fetchWatchMovies(d)
+
+  let filterMovie;
+  if(data?.category){
+    const moreMovies = await fetchMovies(data?.category === "Tv-Series" ? "tv-Series" : data?.category?.toLowerCase())
+    filterMovie = moreMovies?.movies?.filter((item)=>item?._id !== data?._id)
+  }
   return (
     <Container>
-      <Player data={data} moreMovies={filterMovie} slug={slug}/>
+      <Player data={data} moreMovies={filterMovie || []} 
+      slug={slug}/>
     </Container>
   )
 }

@@ -2,7 +2,6 @@ import Container from '@/components/container/Container';
 import Heading from '@/components/heading/Heading';
 import React from 'react';
 import Category from '@/components/category/Category';
-import { fetchMovies } from '@/lib/data';
 
 export const metadata = {
     title: 'K-Drama - Discover and Watch the Best Korean Dramas | Flimify',
@@ -66,10 +65,15 @@ export const metadata = {
     // manifest: '/site.webmanifest',
 };
 
+export async function fetchMovies(query, page = 1, limit = 30){
+    function setIsLoading(){}
+    const res = await handleFetch(`/movies?query=${query}&page=${page}&limit=${limit}`,'GET','','',setIsLoading)
+    return res?.data
+}
   
 export const revalidate = 0
 export default async function page() {
-    const movieData = await fetchMovies('K-Drama')
+    const movieData = await fetchMovies('k-drama')
 
   return (
     <>
@@ -78,7 +82,7 @@ export default async function page() {
             <section className='py-10'>
                 <div className='w-full flex flex-col gap-10'>
                     <Heading page={'K-Drama'} />
-                    <Category data={movieData} />
+                    <Category data={movieData} query={'k-drama'}/>
                 </div>
             </section>
         </Container>

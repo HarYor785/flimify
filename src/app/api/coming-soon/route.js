@@ -1,31 +1,23 @@
 
-export async function GET() {
+export async function GET(req) {
     try {
-        const apiUrl = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=`;
-        const allMovies = [];
-        let currentPage = 1;
-        let totalPages = 1;
+        const {searchParams} = new URL(req.url)
+        const page = searchParams.get('page')
+        const minDate = new Date().toISOString().split('T')[0];
 
-        while (currentPage <= totalPages) {
-            const response = await fetch(`${apiUrl}${currentPage}`, {
-                method: 'GET',
-                headers: {
-                    accept: 'application/json',
-                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_IMDB_KEY}`,
-                },
-            });
+        const response = await fetch(`https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${page}&release_date.gte=${minDate}`, {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_IMDB_KEY}`,
+            },
+            cache: 'no-store'
+        });
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
+        const data = await response.json()
 
-            const data = await response.json();
-            totalPages = data.total_pages;
-            allMovies.push(...data.results);
-            currentPage++;
-        }
-        return new Response(JSON.stringify(allMovies), {
-            status: 200,
+        return new Response(JSON.stringify(data), {
+            status: response.status,
             headers: {
                 'Content-Type': 'application/json',
                 'Cache-Control': 'no-store'

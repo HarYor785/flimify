@@ -5,9 +5,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const CustomSwiper = ({ children }) => {
+const CustomSwiper = ({ children, slides, space }) => {
   return (
     <div className="relative w-full">
         <Swiper
@@ -30,17 +29,18 @@ const CustomSwiper = ({ children }) => {
                     spaceBetween: 10,
                 },
                 1024: {
-                    slidesPerView: 5,
-                    spaceBetween: 30,
+                    slidesPerView: slides,
+                    spaceBetween: space,
                 },
             }}
         >
-             {React.Children.map(children, (child, index) => (
-                <SwiperSlide key={index}>{child}</SwiperSlide>
+            {React.Children.map(children, (child, index) => (
+                <SwiperSlide key={index} className='w-fit'>{child}</SwiperSlide>
             ))}
         </Swiper>
 
-        <div className="absolute top-[-4rem] right-[2rem] flex items-center gap-16 p-2 z-10">
+        <div className="absolute top-[-2.7rem] right-[2rem] bg-red-500 
+        flex items-center gap-16 p-2 z-[1000]">
             <button className="swiper-button-next bg-primary text-white 
             rounded-sm px-4 py-1 !h-8 flex items-center justify-center !-mr-4">
             </button>

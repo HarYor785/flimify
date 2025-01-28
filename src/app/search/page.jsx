@@ -105,7 +105,7 @@ export default async function page({ params, searchParams }){
                                         </Link>
                                         <div className='w-full flex flex-col gap-3'>
                                             <div className='w-full flex flex-col items-start gap-2'>
-                                                <Link href={`/movie/${item?.slug}`}
+                                                <Link href={`/movie/${item?.slug}?d=${item?._id}${item?.season ? `&s=${item?.season}` : ''}`}
                                                 className='md:text-2xl text-lg font-semibold 
                                                 text-secondaryText underline'>
                                                     {item?.title}

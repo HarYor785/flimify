@@ -3,6 +3,8 @@ export async function POST(req){
     const token = req.headers.get('Authorization')
     const {searchParams} = new URL(req.url)
     const id = searchParams.get('id')
+    
+
     try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/watchlist?id=${id}`,{
             method: 'POST',
@@ -35,9 +37,12 @@ export async function POST(req){
 
 export async function GET(req){
     const token = req.headers.get('Authorization')
+    const {searchParams} = new URL(req.url)
+    const page = searchParams.get('page')
+    const limit = searchParams.get('limit')
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/watchlist`,{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/watchlist?page=${page}&limit=${limit}`,{
             method: 'GET',
             headers:{
                 'Content-Type': 'application/json',
